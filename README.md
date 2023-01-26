@@ -3,8 +3,12 @@
 ## Discovery
 
 > Devices are discovered by sending this request to all local IP addresses.
+> 
+> The `fingerprint` parameter is optional and is only used to avoid self-discovering.
+> In this case, the server may respond with an error code if sender and receiver fingerprints match.
+> The fingerprint is generated on each app start randomly.
 
-`GET /api/localsend/v1/info`
+`GET /api/localsend/v1/info?fingerprint=abc`
 
 Response
 
@@ -16,9 +20,9 @@ Response
 }
 ```
 
-## Send Request
+## Send Request (Metadata only)
 
-> Sends the metadata to the receiver.
+> Sends only the metadata to the receiver.
 > 
 > The receiver will decide if this request gets accepted, partially accepted or rejected.
 > 
@@ -42,6 +46,13 @@ Request
       "size": 324242, // bytes
       "fileType": "image", // image | video | pdf | text | other
       "preview": "*preview data*" // nullable
+    },
+    "another file id": {
+      "id": "another file id",
+      "fileName": "another image.jpg",
+      "size": 1234,
+      "fileType": "image",
+      "preview": "*preview data*"
     }
   }
 }
@@ -51,7 +62,8 @@ Response
 
 ```json5
 {
-  "some file id": "some token"
+  "some file id": "some token",
+  "another file id": "some other token"
 }
 ```
 
