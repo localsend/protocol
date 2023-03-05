@@ -30,6 +30,8 @@ The default multicast group is 224.0.0.0/24 because some Android devices reject 
 
 ### 2.1 Multicast UDP (Default)
 
+**Announcement**
+
 At the start of the app, the following message will be sent to the multicast group:
 
 ```json5
@@ -42,7 +44,24 @@ At the start of the app, the following message will be sent to the multicast gro
 }
 ```
 
-Other LocalSend members will notice this message and will reply with their respective information:
+**Response**
+
+Other LocalSend members will notice this message and will reply with their respective information.
+
+First, an HTTP/TCP request is sent to the origin:
+
+`POST /api/localsend/v1/register`
+
+```json5
+{
+  "alias": "Secret Banana",
+  "deviceModel": "Windows",
+  "deviceType": "desktop",
+  "fingerprint": "random string"
+}
+```
+
+As fallback, members can also respond with a Multicast/UDP message.
 
 ```json5
 {
@@ -63,12 +82,6 @@ A response is only triggered when `announcement` is `true`.
 This method should be used when multicast was unsuccessful.
 
 Devices are discovered by sending this request to all local IP addresses.
-
-The `fingerprint` parameter is optional and is only used to avoid self-discovering.
-
-In this case, the server may respond with an error code if sender and receiver fingerprints match.
-
-The fingerprint is generated on each app start randomly.
 
 `GET /api/localsend/v1/info?fingerprint=abc`
 
