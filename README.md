@@ -376,15 +376,13 @@ Sometimes you just want to authenticate the device with something biometric for 
 ```
 
 ### 6.2 Info
-"Device type authn" it describes which form of authentication is used: OAuth, OpenId, TouchId, Automatic Private/Public key. In the case of the "Private/Public key" authentication type, a "device-id-public", "device-id-private" which is information that the user must save locally for later use to authenticate files.
+"device-type-authn" it describes which form of authentication is used: OAuth, OpenId, TouchId, Automatic Private/Public key. In the case of the "Private/Public key" authentication type, a "device-id-public", "device-id-private" which is information that the user must save locally for later use to authenticate files.
 
 But in case of elevated control, you don't need "device-id-public", "device-id-private" to authenticate files, as this is sent remotely to the local network with the information of the device you connected to with OAuth, OpenId, TouchId or Standard Auth ("accept" or "decline").
 
 ### 6.3 use case
-OAuth, OpenId and TouchId rely on a third party service for verification. This may be considered in the future but LocalSend should be self reliant for now.
+OAuth, OpenId and TouchId rely on a third party service for verification. This may be considered in the future but LocalSend should be self reliant for now. 
 
-that's true, things like OAuth, OpenId and TouchId depend on a third-party service. But, I would like to comment briefly that although they are authentication protocols that need third party services to work, some people can create "login extensions" in localsend. For example, if there is any way to use these libraries (react-native-touch-id, OpenID/OAuth2) in localsend and generate a custom way or schema of login that would be very interesting and feasible.
+That's true, things like OAuth, OpenId and TouchId depend on a third-party service. But, I would like to comment briefly that although they are authentication protocols that need third party services to work, some people can create "login extensions" in localsend. For example, if there is any way to use these libraries (react-native-touch-id, OpenID/OAuth2) in localsend and generate a custom way or schema of login that would be very interesting and feasible.
 
-Having some public/private key mechanism is good. Because LocalSend already uses a self-signed certificate for HTTPS encryption, we can just use the certificate to remember devices.
-
-This is a good idea. Perhaps this resource can help with this issue: [Sent history](https://github.com/localsend/localsend/issues/215)
+Having some public/private key mechanism is good. Because LocalSend already uses a self-signed certificate for HTTPS encryption, we can just use the certificate to remember devices. This is a good idea. Perhaps this resource can help with this issue: [Sent history](https://github.com/localsend/localsend/issues/215)
