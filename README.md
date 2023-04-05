@@ -1,5 +1,14 @@
 # LocalSend Protocol v2
 
+The goal is to have a simple REST protocol that does not rely on any external servers.
+
+Because computer networks can be complicated, we cannot assume that every method is available.
+Some devices might not support multicast or might not be allowed to have an HTTP server running.
+
+This is why this protocol tries to be "clever" and uses multiple methods to discover and to send files to other LocalSend members.
+
+The protocol only needs one party to set up an HTTP server.
+
 ## Table of Contents
 
 - [1. Defaults](#1-defaults)
@@ -8,11 +17,15 @@
     - [3.1 Multicast](#31-multicast-udp-default)
     - [3.2 HTTP](#32-http-legacy-mode)
 - [4. File transfer](#4-file-transfer-http)
-    - [4.1 Send request](#41-send-request-metadata-only)
-    - [4.2 Send file](#42-send-file)
-    - [4.3 Cancel](#43-cancel)
-- [5. Additional API](#5-additional-api)
-  - [5.1 Info](#51-info)
+  - [4.1 Send request](#41-send-request-metadata-only)
+  - [4.2 Send file](#42-send-file)
+  - [4.3 Cancel](#43-cancel)
+- [5. Reverse File transfer](#5-reverse-file-transfer-http)
+  - [5.1 Browser URL](#51-browser-url)
+  - [5.2 Receive request](#52-receive-request-metadata-only)
+  - [5.3 Receive file](#53-receive-file)
+- [6. Additional API](#6-additional-api)
+  - [6.1 Info](#61-info)
 
 ## 1. Defaults
 
@@ -49,7 +62,7 @@ At the start of the app, the following message will be sent to the multicast gro
 {
   "alias": "Nice Orange",
   "deviceModel": "Samsung", // nullable
-  "deviceType": "mobile", // mobile | desktop | web
+  "deviceType": "mobile", // mobile | desktop | web | headless | server
   "fingerprint": "random string",
   "announce": true
 }
@@ -120,6 +133,12 @@ Response
 
 ## 4. File transfer (HTTP)
 
+This is the default method.
+
+The receiver setups the HTTP server.
+
+The sender (i.e. HTTP client) sends files to the HTTP server.
+
 ### 4.1 Send Request (Metadata only)
 
 Sends only the metadata to the receiver.
@@ -135,7 +154,7 @@ Request
   "info": {
     "alias": "Nice Orange",
     "deviceModel": "Samsung", // nullable
-    "deviceType": "mobile", // mobile | desktop | web
+    "deviceType": "mobile",
     "fingerprint": "random string" // ignored in HTTPS mode
   },
   "files": {
@@ -143,7 +162,7 @@ Request
       "id": "some file id",
       "fileName": "my image.png",
       "size": 324242, // bytes
-      "fileType": "image", // image | video | pdf | text | other
+      "fileType": "image",
       "preview": "*preview data*" // nullable
     },
     "another file id": {
@@ -169,6 +188,15 @@ Response
 }
 ```
 
+Errors
+
+| HTTP code | Message                    |
+|-----------|----------------------------|
+| 400       | Invalid body               |
+| 403       | Rejected                   |
+| 409       | Blocked by another session |
+| 500       | Unknown error by receiver  |
+ 
 ### 4.2 Send File
 
 The file transfer.
@@ -191,6 +219,14 @@ Response
 No body
 ```
 
+Errors
+
+| HTTP code | Message                     |
+|-----------|-----------------------------|
+| 400       | Missing parameters          |
+| 403       | Invalid token or IP address |
+| 500       | Unknown error by receiver   |
+
 ### 4.3 Cancel
 
 This route will be called when the sender wants to cancel the session.
@@ -205,9 +241,90 @@ Response
 No body
 ```
 
-## 5. Additional API
+## 5. Reverse file transfer (HTTP)
 
-### 5.1 Info
+This is an alternative method which should be used when LocalSend is not available on the receiver.
+
+The sender setups an HTTP server to send files to other members by providing a URL.
+
+The receiver then opens the browser with the given URL and downloads the file.
+
+It is important to note that the unencrypted HTTP protocol is used because browsers reject self-signed certificates.
+
+### 5.1 Browser URL
+
+The receiver can open the following URL in the browser to download the file.
+
+```text
+http://<sender-ip>:<sender-port>
+```
+
+### 5.2 Receive Request (Metadata only)
+
+Send to the sender a request to get a list of file metadata.
+
+`POST /api/localsend/v2/receive-request`
+
+Request
+
+```text
+No body
+```
+
+Response
+
+```json5
+{
+  "info": {
+    "alias": "Nice Orange",
+    "deviceModel": "Samsung", // nullable
+    "deviceType": "mobile", // mobile | desktop | web
+  },
+  "sessionId": "mySessionId",
+  "files": {
+    "some file id": {
+      "id": "some file id",
+      "fileName": "my image.png",
+      "size": 324242, // bytes
+      "fileType": "image", // image | video | pdf | text | other
+      "preview": "*preview data*" // nullable
+    },
+    "another file id": {
+      "id": "another file id",
+      "fileName": "another image.jpg",
+      "size": 1234,
+      "fileType": "image",
+      "preview": "*preview data*"
+    }
+  }
+}
+```
+
+### 5.3 Receive File
+
+The file transfer.
+
+Use the `sessionId`, the `fileId` from `/receive-request`.
+
+This route can be called in parallel.
+
+`GET /api/localsend/v2/receive?sessionId=mySessionId&fileId=someFileId`
+
+Request
+
+```text
+No body
+```
+
+Response
+
+```text
+Binary data
+```
+
+## 6. Additional API
+
+### 6.1 Info
 
 This was an old route previously used for discovery. This has been replaced with `/register` which is a two-way discovery.
 
@@ -224,3 +341,42 @@ Response
   "deviceType": "mobile" // mobile | desktop | web
 }
 ```
+
+## 7. Enums
+
+In this project, enums are used to define the possible values of some fields.
+
+### 7.1 Device Type
+
+Device types are only used for UI purposes like showing an icon.
+
+There is no difference in the protocol between the different device types.
+
+| Value    | Description                               |
+|----------|-------------------------------------------|
+| mobile   | mobile device (Android, iOS, FireOS)      |
+| desktop  | desktop (Windows, MacOS, Linux)           |
+| web      | web browser (Firefox, Chrome)             |
+| headless | program without GUI running on a terminal |
+| server   | (self-hosted) cloud service running 24/7  |
+
+The implementation handle unknown values. The official implementation falls back to `desktop`.
+
+### 7.2 File Type
+
+Different file types may be handled differently by the client.
+
+Text messages in particular are shown directly in the UI without the need to download the file if a `preview` is given.
+
+But there is no difference in the protocol between the different file types.
+
+| Value | Description            |
+|-------|------------------------|
+| image | Image (e.g. JPEG, PNG) |
+| video | Video (e.g. MP4)       |
+| pdf   | PDF document           |
+| text  | Text (message)         |
+| apk   | APK                    |
+| other | Other                  |
+
+The implementation should fall back to `other` for unknown values.
