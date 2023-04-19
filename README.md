@@ -61,8 +61,9 @@ At the start of the app, the following message will be sent to the multicast gro
 ```json5
 {
   "alias": "Nice Orange",
+  "version": "2.0", // protocol version (major.minor)
   "deviceModel": "Samsung", // nullable
-  "deviceType": "mobile", // mobile | desktop | web | headless | server
+  "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
   "fingerprint": "random string",
   "port": 53317,
   "protocol": "https", // http | https
@@ -81,11 +82,12 @@ First, an HTTP/TCP request is sent to the origin:
 ```json5
 {
   "alias": "Secret Banana",
+  "version": "2.0",
   "deviceModel": "Windows",
   "deviceType": "desktop",
   "fingerprint": "random string", // ignored in HTTPS mode
   "port": 53317,
-  "protocol": "https", // http | https
+  "protocol": "https"
 }
 ```
 
@@ -94,11 +96,12 @@ As fallback, members can also respond with a Multicast/UDP message.
 ```json5
 {
   "alias": "Secret Banana",
+  "version": "2.0",
   "deviceModel": "Windows",
   "deviceType": "desktop",
   "fingerprint": "random string",
   "port": 53317,
-  "protocol": "https", // http | https
+  "protocol": "https",
   "announce": false
 }
 ```
@@ -120,6 +123,7 @@ Request
 ```json5
 {
   "alias": "Secret Banana",
+  "version": "2.0", // protocol version (major.minor)
   "deviceModel": "Windows",
   "deviceType": "desktop",
   "fingerprint": "random string", // ignored in HTTPS mode
@@ -133,6 +137,7 @@ Response
 ```json5
 {
   "alias": "Nice Orange",
+  "version": "2.0",
   "deviceModel": "Samsung",
   "deviceType": "mobile",
   "fingerprint": "random string" // ignored in HTTPS mode
@@ -171,6 +176,7 @@ Request
       "fileName": "my image.png",
       "size": 324242, // bytes
       "fileType": "image/jpeg",
+      "sha256": "*sha256 hash*", // nullable
       "preview": "*preview data*" // nullable
     },
     "another file id": {
@@ -178,6 +184,7 @@ Request
       "fileName": "another image.jpg",
       "size": 1234,
       "fileType": "image/jpeg",
+      "sha256": "*sha256 hash*",
       "preview": "*preview data*"
     }
   }
@@ -202,7 +209,6 @@ Errors
 |-----------|----------------------------|
 | 400       | Invalid body               |
 | 403       | Rejected                   |
-| 409       | Blocked by another session |
 | 500       | Unknown error by receiver  |
  
 ### 4.2 Send File
@@ -286,7 +292,7 @@ Response
   "info": {
     "alias": "Nice Orange",
     "deviceModel": "Samsung", // nullable
-    "deviceType": "mobile", // mobile | desktop | web
+    "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
   },
   "sessionId": "mySessionId",
   "files": {
@@ -295,6 +301,7 @@ Response
       "fileName": "my image.png",
       "size": 324242, // bytes
       "fileType": "image/jpeg",
+      "sha256": "*sha256 hash*", // nullable
       "preview": "*preview data*" // nullable
     },
     "another file id": {
@@ -302,6 +309,7 @@ Response
       "fileName": "another image.jpg",
       "size": 1234,
       "fileType": "image/jpeg",
+      "sha256": "*sha256 hash*",
       "preview": "*preview data*"
     }
   }
@@ -345,8 +353,10 @@ Response
 ```json5
 {
   "alias": "Nice Orange",
+  "version": "2.0",
   "deviceModel": "Samsung", // nullable
-  "deviceType": "mobile" // mobile | desktop | web
+  "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
+  "fingerprint": "random string"
 }
 ```
 
