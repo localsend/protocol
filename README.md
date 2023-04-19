@@ -162,14 +162,14 @@ Request
       "id": "some file id",
       "fileName": "my image.png",
       "size": 324242, // bytes
-      "fileType": "image",
+      "fileType": "image/jpeg",
       "preview": "*preview data*" // nullable
     },
     "another file id": {
       "id": "another file id",
       "fileName": "another image.jpg",
       "size": 1234,
-      "fileType": "image",
+      "fileType": "image/jpeg",
       "preview": "*preview data*"
     }
   }
@@ -286,14 +286,14 @@ Response
       "id": "some file id",
       "fileName": "my image.png",
       "size": 324242, // bytes
-      "fileType": "image", // image | video | pdf | text | other
+      "fileType": "image/jpeg",
       "preview": "*preview data*" // nullable
     },
     "another file id": {
       "id": "another file id",
       "fileName": "another image.jpg",
       "size": 1234,
-      "fileType": "image",
+      "fileType": "image/jpeg",
       "preview": "*preview data*"
     }
   }
@@ -355,28 +355,9 @@ There is no difference in the protocol between the different device types.
 | Value    | Description                               |
 |----------|-------------------------------------------|
 | mobile   | mobile device (Android, iOS, FireOS)      |
-| desktop  | desktop (Windows, MacOS, Linux)           |
+| desktop  | desktop (Windows, macOS, Linux)           |
 | web      | web browser (Firefox, Chrome)             |
 | headless | program without GUI running on a terminal |
 | server   | (self-hosted) cloud service running 24/7  |
 
 The implementation handle unknown values. The official implementation falls back to `desktop`.
-
-### 7.2 File Type
-
-Different file types may be handled differently by the client.
-
-Text messages in particular are shown directly in the UI without the need to download the file if a `preview` is given.
-
-But there is no difference in the protocol between the different file types.
-
-| Value | Description            |
-|-------|------------------------|
-| image | Image (e.g. JPEG, PNG) |
-| video | Video (e.g. MP4)       |
-| pdf   | PDF document           |
-| text  | Text (message)         |
-| apk   | APK                    |
-| other | Other                  |
-
-The implementation should fall back to `other` for unknown values.
