@@ -64,6 +64,8 @@ At the start of the app, the following message will be sent to the multicast gro
   "deviceModel": "Samsung", // nullable
   "deviceType": "mobile", // mobile | desktop | web | headless | server
   "fingerprint": "random string",
+  "port": 53317,
+  "protocol": "https", // http | https
   "announce": true
 }
 ```
@@ -81,7 +83,9 @@ First, an HTTP/TCP request is sent to the origin:
   "alias": "Secret Banana",
   "deviceModel": "Windows",
   "deviceType": "desktop",
-  "fingerprint": "random string" // ignored in HTTPS mode
+  "fingerprint": "random string", // ignored in HTTPS mode
+  "port": 53317,
+  "protocol": "https", // http | https
 }
 ```
 
@@ -93,6 +97,8 @@ As fallback, members can also respond with a Multicast/UDP message.
   "deviceModel": "Windows",
   "deviceType": "desktop",
   "fingerprint": "random string",
+  "port": 53317,
+  "protocol": "https", // http | https
   "announce": false
 }
 ```
@@ -116,7 +122,9 @@ Request
   "alias": "Secret Banana",
   "deviceModel": "Windows",
   "deviceType": "desktop",
-  "fingerprint": "random string" // ignored in HTTPS mode
+  "fingerprint": "random string", // ignored in HTTPS mode
+  "port": 53317,
+  "protocol": "https" // http | https
 }
 ```
 
