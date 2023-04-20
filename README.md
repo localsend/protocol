@@ -166,9 +166,12 @@ Request
 {
   "info": {
     "alias": "Nice Orange",
+    "version": "2.0", // protocol version (major.minor)
     "deviceModel": "Samsung", // nullable
-    "deviceType": "mobile",
-    "fingerprint": "random string" // ignored in HTTPS mode
+    "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
+    "fingerprint": "random string", // ignored in HTTPS mode
+    "port": 53317,
+    "protocol": "https" // http | https
   },
   "files": {
     "some file id": {
@@ -291,8 +294,10 @@ Response
 {
   "info": {
     "alias": "Nice Orange",
+    "version": "2.0",
     "deviceModel": "Samsung", // nullable
     "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
+    "fingerprint": "random string" // ignored in HTTPS mode
   },
   "sessionId": "mySessionId",
   "files": {
