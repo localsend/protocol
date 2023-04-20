@@ -242,6 +242,7 @@ Errors
 |-----------|-----------------------------|
 | 400       | Missing parameters          |
 | 403       | Invalid token or IP address |
+| 409       | Blocked by another session  |
 | 500       | Unknown error by receiver   |
 
 ### 4.3 Cancel
