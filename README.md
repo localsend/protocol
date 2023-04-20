@@ -152,13 +152,13 @@ The receiver setups the HTTP server.
 
 The sender (i.e. HTTP client) sends files to the HTTP server.
 
-### 4.1 Send Request (Metadata only)
+### 4.1 Preparation (Metadata only)
 
 Sends only the metadata to the receiver.
 
 The receiver will decide if this request gets accepted, partially accepted or rejected.
 
-`POST /api/localsend/v2/send-request`
+`POST /api/localsend/v2/prepare-upload`
 
 Request
 
@@ -218,11 +218,11 @@ Errors
 
 The file transfer.
 
-Use the `sessionId`, the `fileId` and its file-specific `token` from `/send-request`.
+Use the `sessionId`, the `fileId` and its file-specific `token` from `/prepare-upload`.
 
 This route can be called in parallel.
 
-`POST /api/localsend/v2/send?sessionId=mySessionId&fileId=someFileId&token=someFileToken`
+`POST /api/localsend/v2/upload?sessionId=mySessionId&fileId=someFileId&token=someFileToken`
 
 Request
 
@@ -281,7 +281,7 @@ http://<sender-ip>:<sender-port>
 
 Send to the sender a request to get a list of file metadata.
 
-`POST /api/localsend/v2/receive-request`
+`POST /api/localsend/v2/prepare-download`
 
 Request
 
@@ -330,7 +330,7 @@ Use the `sessionId`, the `fileId` from `/receive-request`.
 
 This route can be called in parallel.
 
-`GET /api/localsend/v2/receive?sessionId=mySessionId&fileId=someFileId`
+`GET /api/localsend/v2/download?sessionId=mySessionId&fileId=someFileId`
 
 Request
 
