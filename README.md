@@ -281,6 +281,10 @@ http://<sender-ip>:<sender-port>
 
 Send to the sender a request to get a list of file metadata.
 
+The downloader may add `?sessionId=mySessionId`. In this case, the request should be accepted if it is the same session.
+
+This is needed if the user refreshes the browser page.
+
 `POST /api/localsend/v2/prepare-download`
 
 Request
