@@ -67,6 +67,7 @@ At the start of the app, the following message will be sent to the multicast gro
   "fingerprint": "random string",
   "port": 53317,
   "protocol": "https", // http | https
+  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
   "announce": true
 }
 ```
@@ -87,7 +88,8 @@ First, an HTTP/TCP request is sent to the origin:
   "deviceType": "desktop",
   "fingerprint": "random string", // ignored in HTTPS mode
   "port": 53317,
-  "protocol": "https"
+  "protocol": "https",
+  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
 }
 ```
 
@@ -102,7 +104,8 @@ As fallback, members can also respond with a Multicast/UDP message.
   "fingerprint": "random string",
   "port": 53317,
   "protocol": "https",
-  "announce": false
+  "download": true,
+  "announce": false,
 }
 ```
 
@@ -128,7 +131,8 @@ Request
   "deviceType": "desktop",
   "fingerprint": "random string", // ignored in HTTPS mode
   "port": 53317,
-  "protocol": "https" // http | https
+  "protocol": "https", // http | https
+  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
 }
 ```
 
@@ -140,7 +144,8 @@ Response
   "version": "2.0",
   "deviceModel": "Samsung",
   "deviceType": "mobile",
-  "fingerprint": "random string" // ignored in HTTPS mode
+  "fingerprint": "random string", // ignored in HTTPS mode
+  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
 }
 ```
 
@@ -171,7 +176,8 @@ Request
     "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
     "fingerprint": "random string", // ignored in HTTPS mode
     "port": 53317,
-    "protocol": "https" // http | https
+    "protocol": "https", // http | https
+    "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
   },
   "files": {
     "some file id": {
@@ -208,11 +214,12 @@ Response
 
 Errors
 
-| HTTP code | Message                    |
-|-----------|----------------------------|
-| 400       | Invalid body               |
-| 403       | Rejected                   |
-| 500       | Unknown error by receiver  |
+| HTTP code | Message                            |
+|-----------|------------------------------------|
+| 204       | Finished (No file transfer needed) |
+| 400       | Invalid body                       |
+| 403       | Rejected                           |
+| 500       | Unknown error by receiver          |
  
 ### 4.2 Send File
 
@@ -302,7 +309,8 @@ Response
     "version": "2.0",
     "deviceModel": "Samsung", // nullable
     "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
-    "fingerprint": "random string" // ignored in HTTPS mode
+    "fingerprint": "random string", // ignored in HTTPS mode
+    "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
   },
   "sessionId": "mySessionId",
   "files": {
@@ -366,7 +374,8 @@ Response
   "version": "2.0",
   "deviceModel": "Samsung", // nullable
   "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
-  "fingerprint": "random string"
+  "fingerprint": "random string",
+  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
 }
 ```
 
