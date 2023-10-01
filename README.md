@@ -1,60 +1,73 @@
 # LocalSend Protocol v2
 
-The goal is to have a simple REST protocol that does not rely on any external servers.
+The goal is to have a simple REST protocol that does not rely on any external servers.<br>
+主要为了实现一个不依赖于任何外部服务器的简单 REST 协议。
 
 Because computer networks can be complicated, we cannot assume that every method is available.
-Some devices might not support multicast or might not be allowed to have an HTTP server running.
+Some devices might not support multicast or might not be allowed to have an HTTP server running.<br>
+因为计算机网络比较复杂，因此我们不能假设每种方法都可用。某些设备可能不支持多点广播或不能运行 HTTP 服务器。
 
-This is why this protocol tries to be "clever" and uses multiple methods to discover and to send files to other LocalSend members.
+This is why this protocol tries to be "clever" and uses multiple methods to discover and to send files to other LocalSend members.<br>
+就是这个原因，所以这协议尝试用多种方式去发现其他 LocalSend 成员，从而执行发送文件。
 
-The protocol only needs one party to set up an HTTP server.
+The protocol only needs one party to set up an HTTP server.<br>
+该协议只需要一方建立 HTTP 服务器即可运行。
 
 ## Table of Contents
+## 目录
 
-- [1. Defaults](#1-defaults)
-- [2. Fingerprint](#2-fingerprint)
-- [3. Discovery](#3-discovery)
-    - [3.1 Multicast](#31-multicast-udp-default)
-    - [3.2 HTTP](#32-http-legacy-mode)
-- [4. File transfer](#4-file-transfer-http)
-  - [4.1 Send request](#41-send-request-metadata-only)
-  - [4.2 Send file](#42-send-file)
-  - [4.3 Cancel](#43-cancel)
-- [5. Reverse File transfer](#5-reverse-file-transfer-http)
-  - [5.1 Browser URL](#51-browser-url)
-  - [5.2 Receive request](#52-receive-request-metadata-only)
-  - [5.3 Receive file](#53-receive-file)
-- [6. Additional API](#6-additional-api)
-  - [6.1 Info](#61-info)
+- [1. Defaults](#1-defaults) 默认配置
+- [2. Fingerprint](#2-fingerprint) 指纹
+- [3. Discovery](#3-discovery) 搜寻发现
+    - [3.1 Multicast](#31-multicast-udp-default) 广播
+    - [3.2 HTTP](#32-http-legacy-mode) HTTP
+- [4. File transfer](#4-file-transfer-http) 文件传输
+  - [4.1 Send request](#41-send-request-metadata-only) 发送请求
+  - [4.2 Send file](#42-send-file) 发送文件
+  - [4.3 Cancel](#43-cancel) 取消
+- [5. Reverse File transfer](#5-reverse-file-transfer-http) 反向文件传输
+  - [5.1 Browser URL](#51-browser-url) 浏览器 URL
+  - [5.2 Receive request](#52-receive-request-metadata-only) 接收请求
+  - [5.3 Receive file](#53-receive-file) 接收文件
+- [6. Additional API](#6-additional-api) 其他 API
+  - [6.1 Info](#61-info) 关于
 
-## 1. Defaults
+## 1. Defaults 默认配置
 
-LocalSend does not require a specific port or multicast address but instead provides a default configuration.
+LocalSend does not require a specific port or multicast address but instead provides a default configuration.<br>
+LocalSend 不需要特定的端口或广播地址，而是提供默认配置。
 
-Everything can be configured in the app settings if the port / address is somehow unavailable.
+Everything can be configured in the app settings if the port / address is somehow unavailable.<br>
+如果端口/地址不可用，可以在应用程序中修改配置。
 
-The default multicast group is 224.0.0.0/24 because some Android devices reject any other multicast group.
+The default multicast group is 224.0.0.0/24 because some Android devices reject any other multicast group.<br>
+默认广播地址是 224.0.0.0/24，因为某些 Android 设备禁止其他广播组。
 
-**Multicast (UDP)**
+**Multicast (UDP) UDP广播**
+
 - Port: 53317
 - Address: 224.0.0.167
 
 **HTTP (TCP)**
+**HTTP（TCP）**
 - Port: 53317
 
-## 2. Fingerprint
+## 2. Fingerprint 指纹
 
-The fingerprint is used to avoid self-discovery and to remember devices.
+The fingerprint is used to avoid self-discovery and to remember devices.<br>
+指纹用于区分设备。
 
 When encryption is on (HTTPS), then the fingerprint is the SHA-256 hash of the certificate.
+使用 HTTPS 加密时，证书的 SHA-256 哈希值作为指纹。
 
 When encryption is off (HTTP), then the fingerprint is a random generated string.
+当关闭 HTTP 加密时，用随机字符串作为指纹。
 
-## 3. Discovery
+## 3. Discovery 搜寻发现
 
-### 3.1 Multicast UDP (Default)
+### 3.1 Multicast UDP (Default) UDP 广播（默认）
 
-**Announcement**
+**Announcement 公告**
 
 At the start of the app, the following message will be sent to the multicast group:
 
