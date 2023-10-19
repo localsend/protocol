@@ -1,5 +1,7 @@
 # LocalSend Protocol v2
 
+**English** | [简体中文](./README-zh-CN.md)
+
 The goal is to have a simple REST protocol that does not rely on any external servers.
 
 Because computer networks can be complicated, we cannot assume that every method is available.
