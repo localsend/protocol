@@ -14,10 +14,10 @@ The protocol only needs one party to set up an HTTP server.
 - [1. Defaults](#1-defaults)
 - [2. Fingerprint](#2-fingerprint)
 - [3. Discovery](#3-discovery)
-    - [3.1 Multicast](#31-multicast-udp-default)
-    - [3.2 HTTP](#32-http-legacy-mode)
+  - [3.1 Multicast](#31-multicast-udp-default)
+  - [3.2 HTTP](#32-http-legacy-mode)
 - [4. File transfer](#4-file-transfer-http)
-  - [4.1 Send request](#41-send-request-metadata-only)
+  - [4.1 Preparation](#41-preparation-metadata-only)
   - [4.2 Send file](#42-send-file)
   - [4.3 Cancel](#43-cancel)
 - [5. Reverse File transfer](#5-reverse-file-transfer-http)
@@ -36,10 +36,12 @@ Everything can be configured in the app settings if the port / address is someho
 The default multicast group is 224.0.0.0/24 because some Android devices reject any other multicast group.
 
 **Multicast (UDP)**
+
 - Port: 53317
 - Address: 224.0.0.167
 
 **HTTP (TCP)**
+
 - Port: 53317
 
 ## 2. Fingerprint
@@ -220,7 +222,7 @@ Errors
 | 400       | Invalid body                       |
 | 403       | Rejected                           |
 | 500       | Unknown error by receiver          |
- 
+
 ### 4.2 Send File
 
 The file transfer.
