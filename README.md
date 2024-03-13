@@ -18,14 +18,14 @@ The protocol only needs one party to set up an HTTP server.
 - [3. Discovery](#3-discovery)
   - [3.1 Multicast](#31-multicast-udp-default)
   - [3.2 HTTP](#32-http-legacy-mode)
-- [4. File transfer](#4-file-transfer-http)
+- [4. File Transfer](#4-file-transfer-http)
   - [4.1 Preparation](#41-preparation-metadata-only)
-  - [4.2 Send file](#42-send-file)
+  - [4.2 Send File](#42-send-file)
   - [4.3 Cancel](#43-cancel)
-- [5. Reverse File transfer](#5-reverse-file-transfer-http)
+- [5. Reverse File Transfer](#5-reverse-file-transfer-http)
   - [5.1 Browser URL](#51-browser-url)
-  - [5.2 Receive request](#52-receive-request-metadata-only)
-  - [5.3 Receive file](#53-receive-file)
+  - [5.2 Receive Request](#52-receive-request-metadata-only)
+  - [5.3 Receive File](#53-receive-file)
 - [6. Additional API](#6-additional-api)
   - [6.1 Info](#61-info)
 
@@ -153,7 +153,7 @@ Response
 }
 ```
 
-## 4. File transfer (HTTP)
+## 4. File Transfer (HTTP)
 
 This is the default method.
 
@@ -161,7 +161,7 @@ The receiver setups the HTTP server.
 
 The sender (i.e. HTTP client) sends files to the HTTP server.
 
-### 4.1 Preparation (Metadata only)
+### 4.1 Preparation (Metadata Only)
 
 Sends only the metadata to the receiver.
 
@@ -270,7 +270,7 @@ Response
 No body
 ```
 
-## 5. Reverse file transfer (HTTP)
+## 5. Reverse File Transfer (HTTP)
 
 This is an alternative method which should be used when LocalSend is not available on the receiver.
 
@@ -288,7 +288,7 @@ The receiver can open the following URL in the browser to download the file.
 http://<sender-ip>:<sender-port>
 ```
 
-### 5.2 Receive Request (Metadata only)
+### 5.2 Receive Request (Metadata Only)
 
 Send to the sender a request to get a list of file metadata.
 
