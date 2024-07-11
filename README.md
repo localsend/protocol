@@ -1,4 +1,4 @@
-# LocalSend Protocol v2
+# LocalSend Protocol v2.1
 
 **English** | [简体中文](./README-zh-CN.md)
 
@@ -167,6 +167,8 @@ Sends only the metadata to the receiver.
 
 The receiver will decide if this request gets accepted, partially accepted or rejected.
 
+If a PIN is required, the query parameter `?pin=123456` should be added.
+
 `POST /api/localsend/v2/prepare-upload`
 
 Request
@@ -190,7 +192,11 @@ Request
       "size": 324242, // bytes
       "fileType": "image/jpeg",
       "sha256": "*sha256 hash*", // nullable
-      "preview": "*preview data*" // nullable
+      "preview": "*preview data*", // nullable
+      "metadata": { // nullable
+        "modified": "2021-01-01T12:34:56Z", // nullable
+        "accessed": "2021-01-01T12:34:56Z", // nullable
+      }
     },
     "another file id": {
       "id": "another file id",
@@ -222,7 +228,10 @@ Errors
 |-----------|------------------------------------|
 | 204       | Finished (No file transfer needed) |
 | 400       | Invalid body                       |
+| 401       | PIN required / Invalid PIN         |
 | 403       | Rejected                           |
+| 409       | Blocked by another session         |
+| 429       | Too many requests                  |
 | 500       | Unknown error by receiver          |
 
 ### 4.2 Send File
@@ -296,6 +305,8 @@ The downloader may add `?sessionId=mySessionId`. In this case, the request shoul
 
 This is needed if the user refreshes the browser page.
 
+If a PIN is required, the query parameter `?pin=123456` should be added.
+
 `POST /api/localsend/v2/prepare-download`
 
 Request
@@ -337,6 +348,15 @@ Response
   }
 }
 ```
+
+Errors
+
+| HTTP code | Message                    |
+|-----------|----------------------------|
+| 401       | PIN required / Invalid PIN |
+| 403       | Rejected                   |
+| 429       | Too many requests          |
+| 500       | Unknown error by sender    |
 
 ### 5.3 Receive File
 
