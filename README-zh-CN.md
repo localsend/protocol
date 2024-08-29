@@ -1,6 +1,6 @@
 # LocalSend 协议 v2
 
-[English](./README-zh-CN.md) | **简体中文**
+[English](./README.md) | **简体中文**
 
 主要为了实现一个不依赖于任何外部服务器的简单 REST 协议。
 
