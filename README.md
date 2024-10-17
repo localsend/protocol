@@ -269,7 +269,7 @@ Errors
 
 This route will be called when the sender wants to cancel the session.
 
-Use the `sessionId` from `/send-request`.
+Use the `sessionId` from [`/prepare-upload`](#41-preparation-metadata-only).
 
 `POST /api/localsend/v2/cancel?sessionId=mySessionId`
 
@@ -362,7 +362,7 @@ Errors
 
 The file transfer.
 
-Use the `sessionId`, the `fileId` from [*receive request*](#52-receive-request-metadata-only).
+Use the `sessionId`, the `fileId` from [`/prepare-download`](#52-receive-request-metadata-only).
 
 This route can be called in parallel.
 
