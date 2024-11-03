@@ -18,11 +18,11 @@ The protocol only needs one party to set up an HTTP server.
 - [3. Discovery](#3-discovery)
   - [3.1 Multicast](#31-multicast-udp-default)
   - [3.2 HTTP](#32-http-legacy-mode)
-- [4. File Transfer](#4-file-transfer-http)
+- [4. File Transfer](#4-file-transfer-http-aka-upload-api)
   - [4.1 Preparation](#41-preparation-metadata-only)
   - [4.2 Send File](#42-send-file)
   - [4.3 Cancel](#43-cancel)
-- [5. Reverse File Transfer](#5-reverse-file-transfer-http)
+- [5. Reverse File Transfer](#5-reverse-file-transfer-http-aka-download-api)
   - [5.1 Browser URL](#51-browser-url)
   - [5.2 Receive Request](#52-receive-request-metadata-only)
   - [5.3 Receive File](#53-receive-file)
@@ -71,7 +71,7 @@ At the start of the app, the following message will be sent to the multicast gro
   "fingerprint": "random string",
   "port": 53317,
   "protocol": "https", // http | https
-  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+  "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
   "announce": true
 }
 ```
@@ -93,7 +93,7 @@ First, an HTTP/TCP request is sent to the origin:
   "fingerprint": "random string", // ignored in HTTPS mode
   "port": 53317,
   "protocol": "https",
-  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+  "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
 }
 ```
 
@@ -136,7 +136,7 @@ Request
   "fingerprint": "random string", // ignored in HTTPS mode
   "port": 53317,
   "protocol": "https", // http | https
-  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+  "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
 }
 ```
 
@@ -149,11 +149,11 @@ Response
   "deviceModel": "Samsung",
   "deviceType": "mobile",
   "fingerprint": "random string", // ignored in HTTPS mode
-  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+  "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
 }
 ```
 
-## 4. File Transfer (HTTP)
+## 4. File Transfer (HTTP) aka Upload API
 
 This is the default method.
 
@@ -183,7 +183,7 @@ Request
     "fingerprint": "random string", // ignored in HTTPS mode
     "port": 53317,
     "protocol": "https", // http | https
-    "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+    "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
   },
   "files": {
     "some file id": {
@@ -238,7 +238,7 @@ Errors
 
 The file transfer.
 
-Use the `sessionId`, the `fileId` and its file-specific `token` from `/prepare-upload`.
+Use the `sessionId`, the `fileId` and its file-specific `token` from [`/prepare-upload`](#41-preparation-metadata-only).
 
 This route can be called in parallel.
 
@@ -269,7 +269,7 @@ Errors
 
 This route will be called when the sender wants to cancel the session.
 
-Use the `sessionId` from `/send-request`.
+Use the `sessionId` from [`/prepare-upload`](#41-preparation-metadata-only).
 
 `POST /api/localsend/v2/cancel?sessionId=mySessionId`
 
@@ -279,7 +279,7 @@ Response
 No body
 ```
 
-## 5. Reverse File Transfer (HTTP)
+## 5. Reverse File Transfer (HTTP) aka Download API
 
 This is an alternative method which should be used when LocalSend is not available on the receiver.
 
@@ -325,7 +325,7 @@ Response
     "deviceModel": "Samsung", // nullable
     "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
     "fingerprint": "random string", // ignored in HTTPS mode
-    "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+    "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
   },
   "sessionId": "mySessionId",
   "files": {
@@ -362,7 +362,7 @@ Errors
 
 The file transfer.
 
-Use the `sessionId`, the `fileId` from `/receive-request`.
+Use the `sessionId`, the `fileId` from [`/prepare-download`](#52-receive-request-metadata-only).
 
 This route can be called in parallel.
 
@@ -399,7 +399,7 @@ Response
   "deviceModel": "Samsung", // nullable
   "deviceType": "mobile", // mobile | desktop | web | headless | server, nullable
   "fingerprint": "random string",
-  "download": true, // if the download API (5.2 and 5.3) is active (optional, default: false)
+  "download": true, // if download API (section 5.2, 5.3) is active (optional, default: false)
 }
 ```
 
