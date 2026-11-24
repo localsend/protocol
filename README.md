@@ -28,6 +28,9 @@ The protocol only needs one party to set up an HTTP server.
   - [5.3 Receive File](#53-receive-file)
 - [6. Additional API](#6-additional-api)
   - [6.1 Info](#61-info)
+- [7. Enums](#7-enums)
+  - [7.1 Device Type](#71-device-type)
+- [8. Implementations](#8-implementations)
 
 ## 1. Defaults
 
@@ -426,3 +429,14 @@ There is no difference in the protocol between the different device types.
 | server   | (self-hosted) cloud service running 24/7  |
 
 The implementation handle unknown values. The official implementation falls back to `desktop`.
+
+## 8. Implementations
+
+Apps that follow this protocol can exchange files with each other.
+
+| App                                                  | Platforms                           | Notes                                        |
+|------------------------------------------------------|-------------------------------------|----------------------------------------------|
+| [LocalSend](https://github.com/localsend/localsend)  | Android, iOS, macOS, Windows, Linux | The official app, with a command line client |
+| [RoomSend](https://github.com/black-dash77/roomsend) | iOS                                 | Independent native SwiftUI client of v2.2    |
+
+Another implementation? Add it with a pull request.
